@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Ingredient } from '../shared/ingredient.model';
 import { Subject } from 'rxjs';
+import { Store } from '@ngrx/store';
+import * as ShoppingListActions from '../shopping-list/store/shopping-list.action';
+import * as fromShoppingList from './store/shopping-list.reducer';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class ShoppingListService {
   ingredientsChanged = new Subject<Ingredient[]>();
   startedEditing = new Subject<number>();
 
-  constructor() { }
+  constructor(
+    private store: Store<fromShoppingList.AppState>
+  ) {}
 
   ingredients: Ingredient[] = [
     new Ingredient('Apples', 5),
@@ -23,23 +28,11 @@ export class ShoppingListService {
   }
 
   addIngredient(newIngredient: Ingredient) {
-    this.ingredients.push(newIngredient)
-    this.ingredientsChanged.next(this.ingredients.slice())
+    this.ingredients.push(newIngredient);
+    this.ingredientsChanged.next(this.ingredients.slice());
   }
 
   addIngredients(newIngredients: Ingredient[]) {
-    this.ingredients.push(...newIngredients);
-    this.ingredientsChanged.next(this.ingredients.slice())
-  }
-
-  updateIngredient(index: number, newIngredient: Ingredient) {
-    this.ingredients[index] = newIngredient;
-    this.ingredientsChanged.next(this.ingredients.slice())
-  }
-
-  deleteIngredient(index: number) {
-    this.ingredients.splice(index,1);
-    console.log(this.ingredients)
-    this.ingredientsChanged.next(this.ingredients.slice());
+    this.store.dispatch(new ShoppingListActions.AddIngredients(newIngredients));
   }
 }
