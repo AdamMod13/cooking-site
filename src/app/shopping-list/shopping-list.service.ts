@@ -9,15 +9,12 @@ import * as fromShoppingList from './store/shopping-list.reducer';
 export class ShoppingListService {
   ingredientsChanged = new Subject<Ingredient[]>();
   startedEditing = new Subject<number>();
-
-  constructor(
-    private store: Store<fromShoppingList.AppState>
-  ) {}
-
   ingredients: Ingredient[] = [
     new Ingredient('Apples', 5),
     new Ingredient('Tomatoes', 10),
   ];
+
+  constructor(private store: Store<fromShoppingList.AppState>) {}
 
   getIngredients() {
     return this.ingredients.slice();
@@ -28,8 +25,7 @@ export class ShoppingListService {
   }
 
   addIngredient(newIngredient: Ingredient) {
-    this.ingredients.push(newIngredient);
-    this.ingredientsChanged.next(this.ingredients.slice());
+    this.store.dispatch(new ShoppingListActions.AddIngredient(newIngredient));
   }
 
   addIngredients(newIngredients: Ingredient[]) {
