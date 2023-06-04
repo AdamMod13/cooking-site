@@ -14,9 +14,10 @@ export class AuthenticateSuccess implements Action {
 
   constructor(
     public payload: {
+      id: number;
+      firstName: string;
+      lastName: string;
       email: string;
-      userId: string;
-      token: string;
       expirationDate: Date;
       redirect: boolean;
     }
@@ -30,7 +31,7 @@ export class Logout implements Action {
 export class LoginStart implements Action {
   readonly type = LOGIN_START;
 
-  constructor(public payload: { email: string; password: string }) {}
+  constructor(public payload: { email: string }) {}
 }
 
 export class AuthenticateFail implements Action {
@@ -42,7 +43,13 @@ export class AuthenticateFail implements Action {
 export class SignupStart implements Action {
   readonly type = SIGNUP_START;
 
-  constructor(public payload: { email: string; password: string }) {}
+  constructor(
+    public payload: {
+      firstName: string;
+      lastName: string;
+      email: string;
+    }
+  ) {}
 }
 
 export class ClearError implements Action {

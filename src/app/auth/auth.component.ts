@@ -27,6 +27,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.storeSub = this.store.select('auth').subscribe((authState) => {
       this.isLoading = authState.loading;
+      console.log(authState.authError);
       this.error = authState.authError;
       if (this.error) {
         console.log(this.error);
@@ -40,18 +41,22 @@ export class AuthComponent implements OnInit, OnDestroy {
 
   onSubmit(form: NgForm) {
     if (form.invalid) {
+      console.log(form);
       return;
     }
     const email = form.value.email;
-    const password = form.value.password;
 
     if (this.isLoginMode) {
-      this.store.dispatch(
-        new AuthActions.LoginStart({ email: email, password: password })
-      );
+      this.store.dispatch(new AuthActions.LoginStart({ email: email }));
     } else {
+      const firstName = form.value.firstName;
+      const lastName = form.value.lastName;
       this.store.dispatch(
-        new AuthActions.SignupStart({ email: email, password: password })
+        new AuthActions.SignupStart({
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+        })
       );
     }
 

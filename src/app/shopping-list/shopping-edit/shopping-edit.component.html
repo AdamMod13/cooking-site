@@ -1,46 +1,46 @@
 <div class="row">
   <div class="col-xs-12">
-    <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+    <form #f="ngForm" (ngSubmit)="onSubmit(f)">
       <div class="row">
         <div class="col-sm-5 form-group">
           <label for="name">Name</label>
           <input
-            type="text"
-            id="name"
             class="form-control"
-            ngModel
+            id="name"
             name="name"
+            ngModel
             required
+            type="text"
           />
         </div>
         <div class="col-sm-2 form-group">
-          <label for="amount">Amount</label>
+          <label for="quantity">Amount</label>
           <input
-            type="number"
-            id="amount"
             class="form-control"
+            id="quantity"
+            name="quantity"
             ngModel
-            name="amount"
             pattern="^[1-9]+[0-9]*$"
             required
+            type="number"
           />
         </div>
       </div>
       <div class="row">
         <div class="col-xs-12">
-          <button class="btn btn-success" type="submit" [disabled]="!f.valid">{{ editMode ? 'Update' : 'Add' }}</button>
+          <button [disabled]="!f.valid" class="btn btn-success" type="submit">{{ editMode ? 'Update' : 'Add' }}</button>
           <button
+            (click)="onDeleteIngredient()"
+            *ngIf="editMode"
             class="btn btn-danger"
             type="button"
-            *ngIf="editMode"
-            (click)="onDeleteIngredient()"
           >
             Delete
           </button>
           <button
+            (click)="onClearIngredient()"
             class="btn btn-primary"
             type="button"
-            (click)="onClearIngredient()"
           >
             Clear
           </button>

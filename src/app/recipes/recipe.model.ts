@@ -1,17 +1,27 @@
-import { Ingredient } from "../shared/ingredient.model";
+import { Ingredient } from '../shared/ingredient.model';
+import { User } from '../auth/user.model';
 
 export class Recipe {
   public id: number;
-  public name: string;
+  public recipeName: string;
   public description: string;
   public imagePath: string;
-  public ingredients: Ingredient[];
+  public author: User;
+  public recipeIngredients: Ingredient[];
 
-  constructor(id: number, name: string, desc: string, imagePath: string, ingredients: Ingredient[]) {
+  constructor(
+    id: number,
+    recipeName: string,
+    desc: string,
+    imagePath: string,
+    author: User,
+    recipeIngredients: Ingredient[]
+  ) {
     this.id = id;
-    this.name = name;
+    this.recipeName = recipeName;
     this.description = desc;
     this.imagePath = imagePath;
-    this.ingredients = ingredients;
+    this.author = author;
+    this.recipeIngredients = recipeIngredients;
   }
 }

@@ -1,10 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { Recipe } from '../recipe.model';
-import { RecipesService } from '../recipes.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, Subscription } from 'rxjs';
-import { DataStorageService } from 'src/app/shared/data-storage.service';
 import * as fromApp from '../../store/app.reducer';
 import { Store } from '@ngrx/store';
 
@@ -18,8 +16,6 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   subscription: Subscription;
 
   constructor(
-    private dataStorageService: DataStorageService,
-    private recipesService: RecipesService,
     private router: Router,
     private route: ActivatedRoute,
     private store: Store<fromApp.AppState>
