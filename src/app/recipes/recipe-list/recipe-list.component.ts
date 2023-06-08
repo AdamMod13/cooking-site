@@ -12,7 +12,10 @@ import { Store } from '@ngrx/store';
   styleUrls: ['./recipe-list.component.css'],
 })
 export class RecipeListComponent implements OnInit, OnDestroy {
-  recipes: Recipe[];
+  initialRecipes: Recipe[];
+  filteredRecipes: Recipe[] = [];
+  recipeFilter: string = '';
+  ingredientFilter: string = '';
   subscription: Subscription;
 
   constructor(
@@ -26,8 +29,37 @@ export class RecipeListComponent implements OnInit, OnDestroy {
       .select('recipes')
       .pipe(map((recipesState) => recipesState.recipes))
       .subscribe((recipes: Recipe[]) => {
-        this.recipes = recipes;
+        this.initialRecipes = recipes;
+        this.filteredRecipes = recipes;
+        this.recipeFilter = '';
+        this.ingredientFilter = '';
       });
+  }
+
+  filterItems(event: any) {
+    const keyCode = event.keyCode || event.which;
+    if (keyCode === 8) {
+      this.filteredRecipes = this.initialRecipes;
+    }
+    const recipeFilterText = this.recipeFilter.toLowerCase().trim();
+    const ingredientFilterText = this.ingredientFilter.toLowerCase().trim();
+    if (
+      (recipeFilterText === '' && ingredientFilterText === '') ||
+      this.filteredRecipes.length === 0
+    ) {
+      this.filteredRecipes = this.initialRecipes;
+    }
+    this.filteredRecipes = this.filteredRecipes.filter((recipe) => {
+      const recipeNameMatch = recipe.recipeName
+        .toLowerCase()
+        .includes(recipeFilterText);
+
+      const ingredientNameMatch = recipe.recipeIngredients.some((ingredient) =>
+        ingredient.name.toLowerCase().includes(ingredientFilterText)
+      );
+
+      return recipeNameMatch && ingredientNameMatch;
+    });
   }
 
   onNewRecipe() {
