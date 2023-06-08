@@ -1,12 +1,11 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as RecipesActions from './recipe.actions';
-import { switchMap } from 'rxjs';
+import { switchMap, tap } from 'rxjs';
 import { Recipe } from '../recipe.model';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Store } from '@ngrx/store';
-import * as fromApp from '../../store/app.reducer';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class RecipeEffects {
@@ -27,7 +26,6 @@ export class RecipeEffects {
         });
       }),
       map((recipes) => {
-        console.log(recipes);
         return new RecipesActions.SetRecipes(recipes);
       })
     )
@@ -42,6 +40,39 @@ export class RecipeEffects {
             'http://localhost:8080/api/recipe/addRecipe',
             recipeData.payload
           );
+        }),
+        tap(() => {
+          this.router.navigate(['/recipes']);
+        })
+      ),
+    { dispatch: false }
+  );
+
+  deleteRecipe$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(RecipesActions.DELETE_RECIPES),
+        switchMap((recipeData: RecipesActions.DeleteRecipes) => {
+          return this.http.delete(
+            `http://localhost:8080/api/recipe/delete/${recipeData.payload}`
+          );
+        })
+      ),
+    { dispatch: false }
+  );
+
+  updateRecipe$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(RecipesActions.UPDATE_RECIPES),
+        switchMap((recipeData: RecipesActions.UpdateRecipes) => {
+          return this.http.post(
+            `http://localhost:8080/api/recipe/updateRecipe/${recipeData.payload.id}`,
+            recipeData.payload
+          );
+        }),
+        tap((recipe) => {
+          this.router.navigate(['/recipes']);
         })
       ),
     { dispatch: false }
@@ -50,6 +81,6 @@ export class RecipeEffects {
   constructor(
     private actions$: Actions,
     private http: HttpClient,
-    private store: Store<fromApp.AppState>
+    private router: Router
   ) {}
 }

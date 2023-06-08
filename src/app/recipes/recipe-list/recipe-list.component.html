@@ -1,12 +1,25 @@
 <div class="row">
   <div class="col-xs-12">
-    <button class="btn btn-success" (click)="onNewRecipe()">New Recipe</button>
+    <button (click)="onNewRecipe()" class="btn btn-success">New Recipe</button>
   </div>
+</div>
+<hr>
+<div>
+  <label></label>
+  <input (input)="filterItems($event)" [(ngModel)]="recipeFilter" class="form-control"
+         placeholder="Search by recipe name"
+         type="text">
+</div>
+<hr>
+<div class="form-group">
+  <input (input)="filterItems($event)" [(ngModel)]="ingredientFilter" class="form-control"
+         placeholder="Search by ingredient name"
+         type="text">
 </div>
 <hr>
 <div class="row">
   <div class="col-xs-12">
-    <app-recipe-item *ngFor="let recipeEl of recipes" [recipe]="recipeEl"></app-recipe-item>
+    <app-recipe-item *ngFor="let recipeEl of filteredRecipes" [recipe]="recipeEl"></app-recipe-item>
   </div>
 </div>
 

@@ -26,12 +26,12 @@ export function recipeReducer(
       };
     case RecipesActions.UPDATE_RECIPES:
       const updatedRecipe = {
-        ...state.recipes[action.payload.index],
-        ...action.payload.recipe,
+        ...state.recipes[action.payload.id],
+        ...action.payload,
       };
-
       const updatedRecipes = [...state.recipes];
-      updatedRecipes[action.payload.index] = updatedRecipe;
+      updatedRecipes[action.payload.id] = updatedRecipe;
+
       return {
         ...state,
         recipes: updatedRecipes,
@@ -39,8 +39,8 @@ export function recipeReducer(
     case RecipesActions.DELETE_RECIPES:
       return {
         ...state,
-        recipes: state.recipes.filter((recipe, index) => {
-          return index !== action.payload;
+        recipes: state.recipes.filter((recipe) => {
+          return recipe.id !== action.payload;
         }),
       };
     default:

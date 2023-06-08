@@ -63,18 +63,14 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+    const recipe: Recipe = {
+      id: this.id,
+      ...this.recipeForm.value,
+      author: this.currentUser,
+    };
     if (this.editMode) {
-      this.store.dispatch(
-        new RecipesActions.UpdateRecipes({
-          index: this.id,
-          recipe: this.recipeForm.value,
-        })
-      );
+      this.store.dispatch(new RecipesActions.UpdateRecipes(recipe));
     } else {
-      const recipe: Recipe = {
-        ...this.recipeForm.value,
-        author: this.currentUser,
-      };
       this.store.dispatch(new RecipesActions.AddRecipes(recipe));
     }
 
@@ -107,7 +103,6 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
           })
         )
         .subscribe((recipe) => {
-          console.log(recipe);
           recipeName = recipe.recipeName;
           recipeDescription = recipe.description;
           recipeImagePath = recipe.imagePath;

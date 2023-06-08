@@ -3,8 +3,9 @@ export class Ingredient {
   public name: string;
   public quantity: number;
 
-  constructor(name: string, amount: number) {
+  constructor(name: string, quantity: number, id?: number) {
+    this.id = id;
     this.name = name;
-    this.quantity = amount;
+    this.quantity = quantity;
   }
 }
